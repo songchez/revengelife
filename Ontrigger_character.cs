@@ -10,7 +10,7 @@ public class Ontrigger_character : MonoBehaviour
 
     void Update()
     {
-        if (onApple && Input.GetMouseButton(0))
+        if (onApple && (Input.GetMouseButton(0) | Input.GetKey(KeyCode.Space)))
         {
             tree.GetComponent<SpriteRenderer>().sprite = null;
         }
