@@ -24,6 +24,7 @@ public class move : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigid2d = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
