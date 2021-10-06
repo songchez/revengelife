@@ -62,8 +62,12 @@ public class move : MonoBehaviour
             movement = new Vector2(0, playerspeed * Time.deltaTime);
             rigid2d.MovePosition(rigid2d.position + movement);
         }
+        Moving_event();
     }
 
+    void Moving_event(){
+        
+    }
     private void UpdateState()
     {
         if (movement.x > 0)

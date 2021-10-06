@@ -7,7 +7,6 @@ public class Ontrigger_character : MonoBehaviour
     bool onApple = false;
     bool onChange = false;
     GameObject tree;
-
     void Update()
     {
         if (onApple && (Input.GetMouseButton(0) | Input.GetKey(KeyCode.Space)))
@@ -21,13 +20,13 @@ public class Ontrigger_character : MonoBehaviour
         {
             tree = other.gameObject;
             onApple = true;
+            
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<SpriteRenderer>().sprite != null && other.gameObject.tag == "tree")
         {
-            
             tree = null;
             onApple = false;
         }
