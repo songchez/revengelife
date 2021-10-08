@@ -1,0 +1,3 @@
+cd Assets/Scripts
+git commit -am "revenger"
+git push origin master
