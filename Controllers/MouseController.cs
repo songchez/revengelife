@@ -12,9 +12,7 @@ public class MouseController : MonoBehaviour
 	Vector3 dragStartPosition;
 	List<GameObject> dragPreviewGameObjects;
 	GameObject selectedTile; //해당타일
-	RaycastHit Hit;
-	float MaxDistance_of_Hit = 15f;
-
+	Vector2 MousePosition;
 	bool isDragging = false;
 
 	enum MouseMode {
@@ -32,7 +30,6 @@ public class MouseController : MonoBehaviour
     {
         //클릭시작위치
         currFramePosition = mainCamera.ScreenToWorldPoint( Input.mousePosition );
-		currFramePosition.z = 0;
 
 		if( Input.GetKeyUp(KeyCode.Escape) ) {
 			if(currentMode == MouseMode.BUILD) {
@@ -43,12 +40,17 @@ public class MouseController : MonoBehaviour
 			}
 		}
 		//빌드모드
-		if(Input.GetMouseButton(0) && currentMode == MouseMode.BUILD){
-			Vector2 wp = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			Ray2D ray = new Ray2D (wp, Vector2.zero);
-			RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction);
-			hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
-            if (hit.collider != null){
+		if(Input.GetMouseButton(0) && currentMode == MouseMode.BUILD)
+		{
+			MousePosition = Input.mousePosition;
+			Vector3 Mp = new Vector3(Input.mousePosition.x,Input.mousePosition.y,10);
+			MousePosition = mainCamera.ScreenToWorldPoint (Mp);
+			Debug.Log(MousePosition);
+			RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
+			if(Hit){
+				Hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
+			}
+            if (Hit.collider != null){
                 Debug.Log("없쪄영");
             }
 			currentMode = MouseMode.SELECT;
@@ -57,7 +59,6 @@ public class MouseController : MonoBehaviour
         
         //마지막 드래그 위치
         lastFramePosition = mainCamera.ScreenToWorldPoint( Input.mousePosition );
-		lastFramePosition.z = 0;
     }
     void UpdateCameraMovement() {
 		// Handle screen panning
@@ -69,7 +70,7 @@ public class MouseController : MonoBehaviour
 		mainCamera.orthographicSize -= mainCamera.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
 		mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, 3f, 25f);
 	}
-	void mouse_buildmode(){
-		
+	public void mouse_buildmode_change(){
+		currentMode = MouseMode.BUILD;
 	}
 }
