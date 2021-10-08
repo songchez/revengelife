@@ -11,6 +11,9 @@ public class MouseController : MonoBehaviour
 	// The world-position start of our left-mouse drag operation
 	Vector3 dragStartPosition;
 	List<GameObject> dragPreviewGameObjects;
+	GameObject selectedTile; //해당타일
+	RaycastHit Hit;
+	float MaxDistance_of_Hit = 15f;
 
 	bool isDragging = false;
 
@@ -39,7 +42,17 @@ public class MouseController : MonoBehaviour
 				Debug.Log("Show game menu?");
 			}
 		}
-
+		//빌드모드
+		if(Input.GetMouseButton(0) && currentMode == MouseMode.BUILD){
+			Vector2 wp = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			Ray2D ray = new Ray2D (wp, Vector2.zero);
+			RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction);
+			hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
+            if (hit.collider != null){
+                Debug.Log("없쪄영");
+            }
+			currentMode = MouseMode.SELECT;
+        }
         UpdateCameraMovement();
         
         //마지막 드래그 위치
@@ -55,5 +68,8 @@ public class MouseController : MonoBehaviour
 
 		mainCamera.orthographicSize -= mainCamera.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
 		mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, 3f, 25f);
+	}
+	void mouse_buildmode(){
+		
 	}
 }
