@@ -10,27 +10,27 @@ public class MouseController : MonoBehaviour
     public Camera mainCamera;
 	// The world-position start of our left-mouse drag operation
 	Vector3 dragStartPosition;
-	List<GameObject> dragPreviewGameObjects;
+	List<GameObject> dragPreviewGameObjects = new List<GameObject>();
 	GameObject selectedTile; //해당타일
-	Vector2 MousePosition;
+	Vector3 MousePosition;
 	bool isDragging = false;
 
 	enum MouseMode {
 		SELECT,
 		BUILD
 	}
-	MouseMode currentMode = MouseMode.SELECT;   // Start is called before the first frame update
+	MouseMode currentMode = MouseMode.SELECT;  
+
+	//UI모드바꾸기
+	public void mouse_buildmode_change(){
+		currentMode = MouseMode.BUILD;
+	} 
     void Start()
     {
         
     }
-
-    // Update is called once per frame
     void Update()
     {
-        //클릭시작위치
-        currFramePosition = mainCamera.ScreenToWorldPoint( Input.mousePosition );
-
 		if( Input.GetKeyUp(KeyCode.Escape) ) {
 			if(currentMode == MouseMode.BUILD) {
 				currentMode = MouseMode.SELECT;
@@ -39,38 +39,54 @@ public class MouseController : MonoBehaviour
 				Debug.Log("Show game menu?");
 			}
 		}
-		//빌드모드
-		if(Input.GetMouseButton(0) && currentMode == MouseMode.BUILD)
-		{
-			MousePosition = Input.mousePosition;
-			Vector3 Mp = new Vector3(Input.mousePosition.x,Input.mousePosition.y,10);
-			MousePosition = mainCamera.ScreenToWorldPoint (Mp);
-			Debug.Log(MousePosition);
-			RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
-			if(Hit){
-				Hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
-			}
-            if (Hit.collider != null){
-                Debug.Log("없쪄영");
-            }
-			currentMode = MouseMode.SELECT;
-        }
+		MouseDrag_build();
         UpdateCameraMovement();
-        
-        //마지막 드래그 위치
-        lastFramePosition = mainCamera.ScreenToWorldPoint( Input.mousePosition );
     }
+	//Todo카메라 이동하기
     void UpdateCameraMovement() {
 		// Handle screen panning
-		if( Input.GetMouseButton(1) || Input.GetMouseButton(2) ) {	// Right or Middle Mouse Button
+		if( Input.GetMouseButton(2) ) {	// Right or Middle Mouse Button
 			Vector3 diff = lastFramePosition - currFramePosition;
 			mainCamera.transform.Translate( diff );
 		}
-
 		mainCamera.orthographicSize -= mainCamera.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
 		mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, 3f, 25f);
 	}
-	public void mouse_buildmode_change(){
-		currentMode = MouseMode.BUILD;
+
+	//todo 드래그건설
+    private void OnMouseDown(){ 
+		 //클릭시작위치
+		MousePosition = Input.mousePosition;
+		Vector3 Mp = new Vector3(Input.mousePosition.x,Input.mousePosition.y,10);
+        currFramePosition = mainCamera.ScreenToWorldPoint(Mp);
+		Debug.Log("시작지점"+ currFramePosition);
+    } 
+	void OnMouseUp()
+	{
+		Debug.Log("완료스"+ lastFramePosition);
+	}
+	private void MouseDrag_build() {
+		//빌드모드
+		if(Input.GetMouseButton(0) && currentMode == MouseMode.BUILD)
+		{
+			//마지막 드래그 위치
+			MousePosition = Input.mousePosition;
+			Vector3 Mp = new Vector3(Input.mousePosition.x,Input.mousePosition.y,10);
+			MousePosition = mainCamera.ScreenToWorldPoint(Mp);
+			RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
+			//Debug.Log(Hit.transform.gameObject);
+			//누르면 리스트에 추가
+			if(Hit){
+				if(Hit.transform.gameObject && !(dragPreviewGameObjects.Contains(Hit.transform.gameObject)))
+				{
+					Hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
+					dragPreviewGameObjects.Add(Hit.transform.gameObject);
+					Debug.Log(dragPreviewGameObjects.Count);
+				}
+			}else if (Hit.collider != null){
+                Debug.Log("없쪄영");
+            }
+			//currentMode = MouseMode.SELECT;
+        }
 	}
 }

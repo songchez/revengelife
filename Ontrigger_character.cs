@@ -6,7 +6,7 @@ public class Ontrigger_character : MonoBehaviour
 {
     bool onApple = false;
     bool onChange = false;
-    GameObject tree;
+    public GameObject tree;
     void Update()
     {
         if (onApple && (Input.GetMouseButton(0) | Input.GetKey(KeyCode.Space)))
