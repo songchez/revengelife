@@ -12,6 +12,7 @@ public class MouseController : MonoBehaviour
 	Vector3 dragStartPosition;
 	List<GameObject> dragPreviewGameObjects = new List<GameObject>();
 	GameObject selectedTile; //해당타일
+	public GameObject build_wall; //설치할 물체
 	Vector3 MousePosition;
 	bool isDragging = false;
 
@@ -19,7 +20,7 @@ public class MouseController : MonoBehaviour
 		SELECT,
 		BUILD
 	}
-	MouseMode currentMode = MouseMode.SELECT;  
+	MouseMode currentMode = MouseMode.SELECT;
 
 	//UI모드바꾸기
 	public void mouse_buildmode_change(){
@@ -79,7 +80,12 @@ public class MouseController : MonoBehaviour
 			if(Hit){
 				if(Hit.transform.gameObject && !(dragPreviewGameObjects.Contains(Hit.transform.gameObject)))
 				{
-					Hit.transform.GetComponent<SpriteRenderer>().color = Color.gray;
+					if(Hit.transform.GetComponent<SpriteRenderer>().sprite == null){
+						//Hit.transform.GetComponent<Tile>().FurnitureOnTile = true; 설치완료후 넣기
+						Vector3 plusoffset = new Vector3(Hit.transform.position.x-0.5f,Hit.transform.position.y+0.5f,0f);
+						GameObject wall = Instantiate(build_wall, plusoffset, Quaternion.identity);
+						
+					}
 					dragPreviewGameObjects.Add(Hit.transform.gameObject);
 					Debug.Log(dragPreviewGameObjects.Count);
 				}
