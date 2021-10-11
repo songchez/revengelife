@@ -85,29 +85,28 @@ public class MouseController : MonoBehaviour
                 GameObject wall = Instantiate(build_wall, plusoffset, Quaternion.identity);
                 wall.name += "(" + Hit.transform.position.x + "," + Hit.transform.position.y + ")";
                 wall.transform.parent = f_walls.transform;
-                dragPreviewGameObjects.Add(wall);
-                Hit.transform.GetComponent<Tile>().FurnitureOnTile = true; //타일판정
+                Hit.transform.GetComponent<Tile>().FurnitureOnTile = wall; //타일판정
 				B_Hit = Hit;
                 Debug.Log(dragPreviewGameObjects.Count);
+				dragPreviewGameObjects.Add(Hit.transform.gameObject);
             }
+			
         }
     }
     private void MouseDrag_deBuild()
     {
-        if (Input.GetMouseButtonDown(1) && currentMode == MouseMode.BUILD_WALL)
+        if (Input.GetMouseButton(1) && currentMode == MouseMode.BUILD_WALL)
         {
             MousePosition = Input.mousePosition;
             Vector3 Mp = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
             MousePosition = mainCamera.ScreenToWorldPoint(Mp);
            	RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
-            if (Hit)
+			//Debug.Log("가보자" + dragPreviewGameObjects.Contains(Hit.transform.gameObject));
+            if (Hit.transform.GetComponent<Tile>().FurnitureOnTile != null)
             {
-                //없을땐 타일, 있을땐 벽
-                Debug.Log("가보자" + dragPreviewGameObjects.Contains(Hit.transform.gameObject));
-                if (dragPreviewGameObjects.Contains(Hit.transform.gameObject) && Hit.transform.GetComponent<SpriteRenderer>().sprite != null)
+                if (dragPreviewGameObjects.Contains(Hit.transform.gameObject))
                 {
-                    Debug.Log(Hit.transform.gameObject.name);
-                    Destroy(Hit.transform.gameObject);
+                    Destroy(Hit.transform.GetComponent<Tile>().FurnitureOnTile);
                     //Hit.transform.GetComponent<Tile>().FurnitureOnTile = false;
                 }
             }
