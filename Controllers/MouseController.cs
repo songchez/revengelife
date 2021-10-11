@@ -33,7 +33,7 @@ public class MouseController : MonoBehaviour
         currentMode = MouseMode.BUILD_WALL;
     }
     void Start()
-    {
+    {//로드파일 없을 시 초기값, default는 로드 값
 
     }
     void Update()
@@ -51,9 +51,9 @@ public class MouseController : MonoBehaviour
         }
         MouseDrag_build();
         MouseDrag_deBuild();
-        UpdateCameraMovement();
+        //UpdateCameraMovement();
     }
-    //Todo카메라 이동하기
+    //Todo카메라 이동하기: 구현중
     void UpdateCameraMovement()
     {
         // Handle screen panning
