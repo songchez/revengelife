@@ -107,6 +107,8 @@ public class MouseController : MonoBehaviour
                 if (dragPreviewGameObjects.Contains(Hit.transform.gameObject))
                 {
                     Destroy(Hit.transform.GetComponent<Tile>().FurnitureOnTile);
+					Hit.transform.GetComponent<Tile>().FurnitureOnTile = null;
+					dragPreviewGameObjects.Remove(Hit.transform.gameObject);
                     //Hit.transform.GetComponent<Tile>().FurnitureOnTile = false;
                 }
             }
