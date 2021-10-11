@@ -15,6 +15,7 @@ public class MouseController : MonoBehaviour
     public GameObject build_wall; //설치할 물체
     public GameObject f_walls; //설치한 벽
     public GameObject f_Others; //설치한 물체
+    RaycastHit2D B_Hit;
     Vector3 MousePosition;
     bool isDragging = false;
 
@@ -65,68 +66,45 @@ public class MouseController : MonoBehaviour
         mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, 3f, 25f);
     }
 
-    //todo 드래그건설
-    private void OnMouseDown()
-    {
-        //클릭시작위치
-        MousePosition = Input.mousePosition;
-        Vector3 Mp = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
-        currFramePosition = mainCamera.ScreenToWorldPoint(Mp);
-        Debug.Log("시작지점" + currFramePosition);
-    }
-    void OnMouseUp()
-    {
-        Debug.Log("완료스" + lastFramePosition);
-    }
+    //todo 드래그드래그앤 빌드맨
     private void MouseDrag_build()
     {
-        //드래그앤 빌드맨
         if (Input.GetMouseButton(0) && currentMode == MouseMode.BUILD_WALL)
         {
-            //마지막 드래그 위치
             MousePosition = Input.mousePosition;
             Vector3 Mp = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
             MousePosition = mainCamera.ScreenToWorldPoint(Mp);
             RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
-            //Debug.Log(Hit.transform.gameObject);
-            //누르면 리스트에 추가
-            if (Hit)
+            if (Hit && B_Hit && B_Hit.transform.gameObject == Hit.transform.gameObject)
             {
-                //없을땐 타일, 있을땐 벽
-                if (!(dragPreviewGameObjects.Contains(Hit.transform.gameObject)))
-                {
-                    if (Hit.transform.GetComponent<SpriteRenderer>().sprite == null)
-                    {
-                        Vector3 plusoffset = new Vector3(Hit.transform.position.x - 0.5f, Hit.transform.position.y + 0.5f, 0f);
-                        GameObject wall = Instantiate(build_wall, plusoffset, Quaternion.identity);
-                        wall.name += "(" + Hit.transform.position.x + "," + Hit.transform.position.y + ")";
-                        wall.transform.parent = f_walls.transform;
-                        dragPreviewGameObjects.Add(wall);
-                        Hit.transform.GetComponent<Tile>().FurnitureOnTile = true; //타일판정
-                    }
-                    Debug.Log(dragPreviewGameObjects.Count);
-                }
+                Debug.Log("전에 맞았던거랑 같다" + Hit);
             }
-            else if (Hit.collider != null)
+            else if(Hit && !(dragPreviewGameObjects.Contains(Hit.transform.gameObject)) && Hit.transform.GetComponent<SpriteRenderer>().sprite == null)
             {
-                Debug.Log("없쪄영");
+                Vector3 plusoffset = new Vector3(Hit.transform.position.x - 0.5f, Hit.transform.position.y + 0.5f, 0f);
+                GameObject wall = Instantiate(build_wall, plusoffset, Quaternion.identity);
+                wall.name += "(" + Hit.transform.position.x + "," + Hit.transform.position.y + ")";
+                wall.transform.parent = f_walls.transform;
+                dragPreviewGameObjects.Add(wall);
+                Hit.transform.GetComponent<Tile>().FurnitureOnTile = true; //타일판정
+				B_Hit = Hit;
+                Debug.Log(dragPreviewGameObjects.Count);
             }
         }
     }
     private void MouseDrag_deBuild()
     {
-        //드래그앤 드빌드(삭제)
         if (Input.GetMouseButtonDown(1) && currentMode == MouseMode.BUILD_WALL)
         {
             MousePosition = Input.mousePosition;
             Vector3 Mp = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
             MousePosition = mainCamera.ScreenToWorldPoint(Mp);
-            RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
+           	RaycastHit2D Hit = Physics2D.Raycast(MousePosition, transform.forward);
             if (Hit)
             {
                 //없을땐 타일, 있을땐 벽
                 Debug.Log("가보자" + dragPreviewGameObjects.Contains(Hit.transform.gameObject));
-                if (dragPreviewGameObjects.Contains(Hit.transform.gameObject && Hit.transform.GetComponent<SpriteRenderer>().sprite != null))
+                if (dragPreviewGameObjects.Contains(Hit.transform.gameObject) && Hit.transform.GetComponent<SpriteRenderer>().sprite != null)
                 {
                     Debug.Log(Hit.transform.gameObject.name);
                     Destroy(Hit.transform.gameObject);
