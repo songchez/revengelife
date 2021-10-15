@@ -11,14 +11,6 @@ public class move : MonoBehaviour
     Rigidbody2D rigid2d;
     Vector2 movement;
     bool fucker= true;
-    enum States
-    {
-        right = 4,
-        left = 3,
-        up = 1,
-        down = 2,
-        idle = 5
-    }
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +26,6 @@ public class move : MonoBehaviour
     {
         //position_maincharacter = new Vector3(transform.position.x, transform.position.y, -10);
         //main_camera.transform.position = position_maincharacter;
-        
     }
 
     private void Playermove()
