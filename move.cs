@@ -11,7 +11,6 @@ public class move : MonoBehaviour
     Vector3 position_maincharacter;
     Rigidbody2D rigid2d;
     Vector2 movement;
-    string animationState = "MoveState";
     bool fucker= true;
     enum States
     {
@@ -63,29 +62,6 @@ public class move : MonoBehaviour
         {
             movement = new Vector2(0, playerspeed * Time.deltaTime);
             rigid2d.MovePosition(rigid2d.position + movement);
-        }
-    }
-    private void UpdateState()
-    {
-        if (movement.x > 0)
-        {
-            animator.SetInteger(animationState, (int)States.right);
-        }
-        else if (movement.x < 0)
-        {
-            animator.SetInteger(animationState, (int)States.left);
-        }
-        else if (movement.y > 0)
-        {
-            animator.SetInteger(animationState, (int)States.up);
-        }
-        else if (movement.y < 0)
-        {
-            animator.SetInteger(animationState, (int)States.down);
-        }
-        else
-        {
-            animator.SetInteger(animationState, (int)States.idle);
         }
     }
 }
