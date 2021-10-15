@@ -7,7 +7,6 @@ public class move : MonoBehaviour
 {
     public int playerspeed = 0;
     //public Camera main_camera;
-    Animator animator;
     Vector3 position_maincharacter;
     Rigidbody2D rigid2d;
     Vector2 movement;
@@ -23,7 +22,6 @@ public class move : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
         rigid2d = GetComponent<Rigidbody2D>();
     }
 
@@ -34,7 +32,6 @@ public class move : MonoBehaviour
     }
     void Update()
     {
-        UpdateState();
         //position_maincharacter = new Vector3(transform.position.x, transform.position.y, -10);
         //main_camera.transform.position = position_maincharacter;
         
