@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmwpfksfkdhb3"]
+
+[ext_resource type="Script" path="res://Weapon System/Scripts/ShootingBehavior.gd" id="1"]
+[ext_resource type="Script" path="res://GameObjects/Units/Player/Scripts/Player.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://d26juk8oxuyjq" path="res://라쿤맨.png" id="3"]
+[ext_resource type="AudioStream" uid="uid://sm5wsdcum7is" path="res://laser_138.wav" id="4"]
+[ext_resource type="Resource" uid="uid://cf5ycph2we5il" path="res://Weapon System/Data/Weapon_Data.tres" id="5"]
+[ext_resource type="Script" path="res://GameObjects/Units/Player/Scripts/MovementAudio.gd" id="6"]
+[ext_resource type="AudioStream" uid="uid://d27vhcvsxhyux" path="res://Minifantasy_Dungeon_SFX/16_human_walk_stone_1.wav" id="7"]
+[ext_resource type="Script" path="res://autoloads/GameManager.gd" id="8_xu1li"]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 18.6815
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+script = ExtResource("2")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(11, 0)
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("3")
+
+[node name="ShootingBehavior" type="Node2D" parent="."]
+script = ExtResource("1")
+WeaponResource = ExtResource("5")
+
+[node name="Timer" type="Timer" parent="ShootingBehavior"]
+one_shot = true
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="ShootingBehavior"]
+stream = ExtResource("4")
+
+[node name="MovementAudio" type="Node2D" parent="." node_paths=PackedStringArray("controlNode")]
+script = ExtResource("6")
+controlNode = NodePath("..")
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="MovementAudio"]
+stream = ExtResource("7")
+
+[node name="Timer" type="Timer" parent="MovementAudio"]
+one_shot = true
+
+[node name="listener" type="Node2D" parent="."]
+script = ExtResource("8_xu1li")
+
+[connection signal="hasDied" from="." to="listener" method="_on_has_died"]
+[connection signal="timeout" from="ShootingBehavior/Timer" to="ShootingBehavior" method="_on_Timer_timeout"]

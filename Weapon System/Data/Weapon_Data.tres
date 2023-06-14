@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3 uid="uid://cf5ycph2we5il"]
+
+[ext_resource type="Script" path="res://Weapon System/Scripts/WeaponResource.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cjj2x3yonj108" path="res://Weapon System/Bullet.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+Projectile = ExtResource("2")
+TimeTweenShots = 0.2
