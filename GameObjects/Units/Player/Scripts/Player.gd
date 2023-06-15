@@ -25,7 +25,6 @@ func _input(event):
 func _physics_process(delta):
 	get_input()
 	move_and_slide()
-	look_at(get_global_mouse_position())
 
 func enable(b:bool):
 	set_process(b)

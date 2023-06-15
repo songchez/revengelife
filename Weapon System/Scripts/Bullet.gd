@@ -5,12 +5,11 @@ var direction := Vector2.RIGHT
 @export var damage:float = 10
 
 func _ready():
-	top_level
-	direction = direction.normalized()
-	look_at(direction + global_position)
+	look_at(get_global_mouse_position())
+	direction = Vector2.RIGHT.rotated(global_rotation)
 
 func _physics_process(delta):
-	var vel = direction * speed * delta
+	var vel = direction.normalized() * speed * delta
 	var col = move_and_collide(vel, false)
 	
 	if(col and col.collider):

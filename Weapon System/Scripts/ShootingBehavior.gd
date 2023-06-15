@@ -17,10 +17,7 @@ func Shoot():
 	
 	#create instance of projectile
 	var projectile = WeaponResource.Projectile.instantiate()
-	
-	#Set varibles on projectile
-	projectile.direction = Vector2.RIGHT.rotated(global_rotation)
-	projectile.position = Vector2(1,1)
+
 	#부모노드와 충돌하지 않게
 	projectile.add_collision_exception_with(get_parent())
 	
