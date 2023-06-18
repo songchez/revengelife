@@ -5,6 +5,8 @@ var direction := Vector2.RIGHT
 @export var damage:float = 10
 
 func _ready():
+	self.position = get_parent().global_position
+	set_as_top_level(true)
 	look_at(get_global_mouse_position())
 	direction = Vector2.RIGHT.rotated(global_rotation)
 

@@ -24,6 +24,7 @@ func Shoot():
 	#Add to scene
 	self.add_child(projectile)
 	
+	
 	canShoot = false
 	emit_signal("shotFired")
 	timer.start(WeaponResource.TimeTweenShots)
