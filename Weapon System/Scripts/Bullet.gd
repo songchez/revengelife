@@ -14,11 +14,11 @@ func _physics_process(delta):
 	var vel = direction.normalized() * speed * delta
 	var col = move_and_collide(vel, false)
 	
-	if(col and col.collider):
-		if(col.collider.has_method("takeDamage")):
-			col.collider.takeDamage(damage)
+	if(col and col.get_collider()):
+		if(col.get_collider().has_method("takeDamage")):
+			col.get_collider().takeDamage(damage)
 		
-		if(col.collider.has_method("apply_impulse")):
-			col.collider.apply_impulse(col.collider.global_position, direction)
+		if(col.get_collider().has_method("apply_impulse")):
+			col.get_collider().apply_impulse(col.collider.global_position, direction)
 		
 		queue_free()

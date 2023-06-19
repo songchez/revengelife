@@ -1,8 +1,9 @@
 extends CharacterBody2D
 class_name Player
 
-const speed = 300
-var health = 100
+@export var speed = 300
+@export var health = 100
+@export var HPbar = Node.new()
 
 @onready var shootingBehavior := $ShootingBehavior
 
@@ -36,6 +37,7 @@ func takeDamage(amount:float):
 	if health <= 0:
 		kill()
 	emit_signal("tookDamage", amount)
+	HPbar.value = health
 
 func kill():
 	if !isDead:

@@ -1,15 +1,14 @@
-extends KinematicBody2D
+extends PhysicsBody2D
 
 const MOVE_SPEED = 200
-
-onready var raycast = $RayCast2D
-
-export(float, 0, 1000) var health = 100
+@onready var raycast = $RayCast2D
+@export var health = 100
+@export var playerNodePath = NodePath()
 
 var player = null
 
 func _ready():
-	player = GameManager.player
+	player = get_node(playerNodePath)
 
 func _physics_process(delta):
 	if player == null:
@@ -23,7 +22,7 @@ func _physics_process(delta):
 	if raycast.is_colliding():
 		var coll = raycast.get_collider()
 		if coll.name == "Player":
-			coll.takeDamage(1)
+			coll.takeDamage(0.2)
 
 func takeDamage(amount:float):
 	$healthbar.value = health
